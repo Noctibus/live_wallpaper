@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Progress Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            width: 100vw;
+            color: white;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        .container {
+            width: 1920px;
+            height: 1080px;
+            margin: 0 auto;
+            padding: 30px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .title {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .progress-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 120px;
+            flex: 1;
+        }
+
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            opacity: 0.8;
+        }
+
+        .progress-bar-container {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            padding: 4px;
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            height: 30px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: width 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .calendar-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .calendar-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            gap: 10px;
+            width: 95%;
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        .day-cell {
+            aspect-ratio: 1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            position: relative;
+            min-height: 50px;
+            font-size: 0.9em;
+        }
+
+        .day-past {
+            background: #6c757d;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .day-today {
+            background: #dc3545;
+            color: white;
+            animation: pulse 2s infinite;
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        .day-future {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+
+
+        .date-info {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .date-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .date-label {
+            font-size: 0.8em;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+
+        .date-value {
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .title { font-size: 2em; }
+            .progress-info { flex-direction: column; }
+            .calendar-grid { grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); gap: 8px; }
+            .day-cell { min-height: 40px; font-size: 0.8em; }
+            .legend { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Snellium Internship Journey</h1>
+            <p class="subtitle">Progress Tracker & Calendar</p>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-info">
+                <div class="stat-card">
+                    <div class="stat-number" id="daysCompleted">0</div>
+                    <div class="stat-label">Days Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalDays">0</div>
+                    <div class="stat-label">Total Days</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="daysRemaining">0</div>
+                    <div class="stat-label">Days Remaining</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="progressPercent">0%</div>
+                    <div class="stat-label">Progress</div>
+                </div>
+            </div>
+            
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%;">
+                    <span id="progressText">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="calendar-section">
+            <h2 class="calendar-title">Internship Calendar</h2>
+            <div class="calendar-grid" id="calendarGrid"></div>
+            
+
+
+        </div>
+
+        <div class="date-info">
+            <div class="date-item">
+                <div class="date-label">Started</div>
+                <div class="date-value" id="startDate"></div>
+            </div>
+            <div class="date-item">
+                <div class="date-label">Today</div>
+                <div class="date-value" id="currentDate"></div>
+            </div>
+            <div class="date-item">
+                <div class="date-label">Ending</div>
+                <div class="date-value" id="endDate"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration - EDIT THESE DATES
+        const internshipStart = new Date('2025-06-16'); // June 16, 2024
+        const internshipEnd = new Date('2025-11-28');   // November 28, 2024
+
+        function updateInternshipTracker() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Reset time to start of day
+            
+            // Calculate days
+            const totalDays = Math.ceil((internshipEnd - internshipStart) / (1000 * 60 * 60 * 24)) + 1;
+            const daysPassed = Math.max(0, Math.ceil((today - internshipStart) / (1000 * 60 * 60 * 24)) + 1);
+            const daysRemaining = Math.max(0, totalDays - daysPassed);
+            const progressPercent = Math.min(100, Math.round((daysPassed / totalDays) * 100));
+
+            // Update stats
+            document.getElementById('daysCompleted').textContent = daysPassed;
+            document.getElementById('totalDays').textContent = totalDays;
+            document.getElementById('daysRemaining').textContent = daysRemaining;
+            document.getElementById('progressPercent').textContent = progressPercent + '%';
+            
+            // Update progress bar
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            setTimeout(() => {
+                progressBar.style.width = progressPercent + '%';
+                progressText.textContent = progressPercent + '%';
+            }, 100);
+
+            // Update dates with French format
+            document.getElementById('startDate').textContent = internshipStart.toLocaleDateString('fr-FR');
+            document.getElementById('endDate').textContent = internshipEnd.toLocaleDateString('fr-FR');
+            document.getElementById('currentDate').textContent = today.toLocaleDateString('fr-FR');
+
+            // Generate calendar
+            generateCalendar(totalDays, daysPassed, today);
+        }
+
+        function generateCalendar(totalDays, daysPassed, today) {
+            const calendarGrid = document.getElementById('calendarGrid');
+            calendarGrid.innerHTML = '';
+
+            for (let i = 1; i <= totalDays; i++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'day-cell';
+                dayElement.textContent = i;
+
+                if (i < daysPassed) {
+                    dayElement.classList.add('day-past');
+                } else if (i === daysPassed) {
+                    dayElement.classList.add('day-today');
+                } else {
+                    dayElement.classList.add('day-future');
+                }
+
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+
+        // Initialize on page load
+        updateInternshipTracker();
+
+        // Update every hour to catch day changes
+        setInterval(updateInternshipTracker, 3600000);
+
+        // Update at midnight
+        function scheduleNextUpdate() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 1, 0); // 1 second past midnight
+            
+            const msUntilMidnight = tomorrow - now;
+            setTimeout(() => {
+                updateInternshipTracker();
+                // Schedule daily updates
+                setInterval(updateInternshipTracker, 24 * 60 * 60 * 1000);
+            }, msUntilMidnight);
+        }
+
+        scheduleNextUpdate();
+    </script>
+</body>
+</html>
