@@ -1,2 +1,2 @@
-@reboot /home/chtan/apps/live_wallpaper/generate_wallpaper.sh
-0 * * * * /home/chtan/apps/live_wallpaper/generate_wallpaper.sh
+@reboot path_to/live_wallpaper/generate_wallpaper.sh
+0 * * * * path_to/live_wallpaper/generate_wallpaper.sh

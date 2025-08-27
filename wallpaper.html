@@ -32,22 +32,23 @@
         }
 
         .container {
-            width: 1920px;
-            height: 1080px;
+            width: 100%;        /* instead of 1920px */
+            max-width: 1750px;  /* optional: keep it from being too wide on big screens */
+            height: 100vh;
             margin: 0 auto;
             padding: 30px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
+            position: relative; /* changed from absolute */
+            transform: none;    /* remove horizontal shift */
         }
+
 
         .header {
             text-align: center;
             margin-bottom: 25px;
+            margin-top: 25px;
         }
 
         .title {
@@ -159,9 +160,9 @@
 
         .calendar-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(45px, 1fr)); /* was 50px */
             gap: 10px;
-            width: 95%;
+            width: 90%;  /* was 95% */
             margin: 0 auto;
             flex: 1;
         }
@@ -328,10 +329,11 @@
                 progressText.textContent = progressPercent + '%';
             }, 100);
 
+            const dates_format = {weekday: 'long', day: '2-digit', month: 'long', year: 'numeric'}
             // Update dates with French format
-            document.getElementById('startDate').textContent = internshipStart.toLocaleDateString('fr-FR');
-            document.getElementById('endDate').textContent = internshipEnd.toLocaleDateString('fr-FR');
-            document.getElementById('currentDate').textContent = today.toLocaleDateString('fr-FR');
+            document.getElementById('startDate').textContent = internshipStart.toLocaleDateString('en-GB', dates_format);
+            document.getElementById('endDate').textContent = internshipEnd.toLocaleDateString('en-GB', dates_format);
+            document.getElementById('currentDate').textContent = today.toLocaleDateString('en-GB', dates_format);
 
             // Generate calendar
             generateCalendar(totalDays, daysPassed, today);

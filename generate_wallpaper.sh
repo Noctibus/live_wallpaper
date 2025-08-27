@@ -1,5 +1,5 @@
 #!/bin/bash
-ROOT="$HOME/apps/live_wallpaper"
+ROOT="$(pwd)"
 HTML="$ROOT/wallpaper.html"
 IMG="$ROOT/wallpaper.png"
 
@@ -42,4 +42,4 @@ fi
 cd "$ROOT" && node capture_playwright.js "$HTML" "$IMG"
 
 # Apply as wallpaper
-gsettings set org.gnome.desktop.background picture-uri "file://$IMG"
+gsettings set org.gnome.desktop.background picture-uri-dark "file://$IMG"
