@@ -1,10 +1,14 @@
 #!/bin/bash
 ROOT="$(pwd)"
+BUILD="$ROOT/wallpaper_build"
 HTML="$ROOT/wallpaper.html"
-IMG="$ROOT/wallpaper.png"
+IMG="$BUILD/wallpaper.png"
 
-# Create Playwright script
-cat > "$ROOT/capture_playwright.js" << 'EOF'
+# Ensure build directory exists
+mkdir -p "$BUILD"
+
+# Create Playwright script inside build folder
+cat > "$BUILD/capture_playwright.js" << 'EOF'
 const { chromium } = require('playwright');
 
 (async () => {
@@ -31,15 +35,17 @@ const { chromium } = require('playwright');
 })();
 EOF
 
-# Install Playwright if needed
+# Install Playwright inside build folder if needed
+cd "$BUILD"
 if ! npm list playwright &> /dev/null; then
     echo "Installing Playwright..."
-    cd "$ROOT" && npm init -y && npm install playwright
+    npm init -y
+    npm install playwright
     npx playwright install chromium
 fi
 
 # Generate screenshot
-cd "$ROOT" && node capture_playwright.js "$HTML" "$IMG"
+node "$BUILD/capture_playwright.js" "$HTML" "$IMG"
 
 # Apply as wallpaper
 gsettings set org.gnome.desktop.background picture-uri-dark "file://$IMG"
