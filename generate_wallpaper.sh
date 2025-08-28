@@ -1,5 +1,5 @@
 #!/bin/bash
-ROOT="$(pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD="$ROOT/wallpaper_build"
 HTML="$ROOT/wallpaper.html"
 IMG="$BUILD/wallpaper.png"
