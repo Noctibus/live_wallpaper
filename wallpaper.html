@@ -337,7 +337,7 @@
             const totalDays = Math.ceil((internshipEnd - internshipStart) / (1000 * 60 * 60 * 24)) + 1;
             const daysPassed = Math.max(0, Math.ceil((today - internshipStart) / (1000 * 60 * 60 * 24)) + 1);
             const daysRemaining = Math.max(0, totalDays - daysPassed);
-            const progressPercent = Math.min(100, Math.round((daysPassed / totalDays) * 100));
+            const progressPercent = Math.min(100, Math.round((daysPassed / totalDays) * 1000)/10);
 
             // Update stats
             document.getElementById('daysCompleted').textContent = daysPassed;
