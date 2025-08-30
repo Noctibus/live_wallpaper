@@ -215,10 +215,13 @@
         }
 
         .day-today {
-            background: #dc3545;
+            background: linear-gradient(135deg, #ff4757 0%, #ff3742 50%, #ff6b7a 100%);
             color: white;
             animation: pulse 2s infinite;
-            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.4);
+            box-shadow: 0 6px 25px rgba(255, 71, 87, 0.6);
+            transform: scale(1.1);
+            z-index: 10;
+            position: relative;
         }
 
         .day-future {
@@ -227,26 +230,29 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
-        /* Holiday styles - discrete and subtle */
+        /* Holiday styles - fresh green mint theme */
         .day-holiday {
-            background: linear-gradient(135deg, #f8d7da 0%, #f1c0c7 100%) !important;
-            color: #721c24 !important;
-            border: 2px solid rgba(241, 192, 199, 0.6) !important;
-            box-shadow: 0 2px 8px rgba(248, 215, 218, 0.4) !important;
+            background: linear-gradient(135deg, #56d6aa 0%, #7ed4ad 50%, #a8e6cf 100%) !important;
+            color: #1e4d3c !important;
+            border: 2px solid rgba(86, 214, 170, 0.8) !important;
+            box-shadow: 0 4px 12px rgba(86, 214, 170, 0.3) !important;
         }
 
         .day-holiday.day-today {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+            background: linear-gradient(135deg, #ff4757 0%, #ff3742 50%, #ff6b7a 100%) !important;
             color: white !important;
-            border: 2px solid rgba(248, 215, 218, 0.8) !important;
             animation: pulse 2s infinite;
-            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.6) !important;
+            box-shadow: 0 8px 30px rgba(255, 71, 87, 0.7) !important;
+            transform: scale(1.1) !important;
+            z-index: 10 !important;
+            position: relative !important;
         }
 
         .day-holiday.day-future {
-            background: linear-gradient(135deg, rgba(248, 215, 218, 0.3) 0%, rgba(241, 192, 199, 0.2) 100%) !important;
-            border: 2px dashed rgba(248, 215, 218, 0.5) !important;
-            color: rgba(248, 215, 218, 0.8) !important;
+            background: linear-gradient(135deg, rgba(86, 214, 170, 0.3) 0%, rgba(168, 230, 207, 0.2) 100%) !important;
+            border: 2px dashed rgba(86, 214, 170, 0.6) !important;
+            color: rgba(168, 230, 207, 0.9) !important;
+            box-shadow: 0 2px 8px rgba(86, 214, 170, 0.2) !important;
         }
 
         @keyframes pulse {
@@ -401,6 +407,11 @@
             return holidaySet.has(date.toDateString());
         }
 
+        function isWeekend(date) {
+            const dayOfWeek = date.getDay();
+            return dayOfWeek === 0 || dayOfWeek === 6; // Sunday = 0, Saturday = 6
+        }
+
         function updateInternshipTracker() {
             const today = new Date();
             today.setHours(0, 0, 0, 0); // Reset time to start of day
@@ -448,8 +459,9 @@
                 const currentDate = new Date(internshipStart);
                 currentDate.setDate(currentDate.getDate() + (i - 1));
 
-                // Check if this day is a holiday
+                // Check if this day is a holiday or weekend
                 const isHolidayDay = isHoliday(currentDate);
+                const isWeekendDay = isWeekend(currentDate);
 
                 // Apply base styles
                 if (i < daysPassed) {
@@ -460,8 +472,8 @@
                     dayElement.classList.add('day-future');
                 }
 
-                // Apply holiday style if applicable
-                if (isHolidayDay) {
+                // Apply holiday style if it's a holiday OR weekend
+                if (isHolidayDay || isWeekendDay) {
                     dayElement.classList.add('day-holiday');
                 }
 
